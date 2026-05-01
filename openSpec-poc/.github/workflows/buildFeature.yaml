@@ -1,0 +1,42 @@
+name: Feature Branch Build & Test
+
+on:
+  push:
+    branches:
+      - feature/**
+      - bugfix/**
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-m2
+
+      - name: Compile only (fast feedback)
+        run: mvn clean compile
+
+      - name: Run Unit Tests
+        run: mvn test
+
+      - name: Validate Specs (OpenSpec)
+        run: |
+          pip install yamllint
+          yamllint specs/
