@@ -1,0 +1,63 @@
+id: dataflow-main-pipeline
+
+type: beam_pipeline
+
+description: >
+  End-to-end pipeline for ingestion, enrichment, YTD calculation, and accounting processing.
+
+orchestrator:
+  trigger: composer_dag
+  platform: Cloud Composer
+
+stages:
+  - ingestion
+  - join_reference_data
+  - ytd_calculation
+  - accounting_processing
+
+inputs:
+  runtime_parameters:
+    - name: business_date
+      type: string
+      required: true
+      description: Processing date in yyyy-MM-dd format
+
+    - name: source_bucket
+      type: string
+      required: true
+      description: Input GCS bucket path
+
+    - name: input_file_pattern
+      type: string
+      required: true
+      description: Input file wildcard pattern
+
+    - name: reference_dataset
+      type: string
+      required: true
+      description: BigQuery dataset containing reference tables
+
+    - name: target_table
+      type: string
+      required: true
+      description: BigQuery output table
+
+    - name: run_mode
+      type: string
+      required: false
+      default: daily
+      allowed_values:
+        - daily
+        - rerun
+        - backfill
+
+outputs:
+  sink:
+    type: bigquery
+    mode: append
+
+constraints:
+  - scalable
+  - fault_tolerant
+  - idempotent
+  - parameterized_execution

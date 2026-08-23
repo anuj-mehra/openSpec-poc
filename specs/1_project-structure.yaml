@@ -1,0 +1,64 @@
+id: dataflow-project-structure
+
+type: project_structure
+
+description: >
+  Standard folder structure for Apache Beam Dataflow project
+  with modular transforms and spec-driven development.
+
+structure:
+
+  root:
+    - name: src/main/java/com/project
+      type: directory
+
+      children:
+        - name: pipeline
+          description: Main pipeline entry point
+
+        - name: transforms
+          description: All Beam PTransforms (stage-wise)
+
+        - name: models
+          description: POJO classes for records
+
+        - name: options
+          description: PipelineOptions interfaces
+
+        - name: utils
+          description: Common utilities
+
+    - name: src/test/java/com/project
+      type: directory
+      description: Unit and integration tests
+
+    - name: specs
+      type: directory
+      description: OpenSpec YAML files
+
+    - name: skills
+      type: directory
+      description: Reusable AI skills
+
+    - name: scripts
+      type: directory
+      description: Helper scripts (local run, deployment)
+
+    - name: pom.xml
+      type: file
+
+    - name: README.md
+      type: file
+
+preservation_rules:
+  - do_not_delete_existing_files: true
+  - do_not_delete_existing_folders: true
+  - do_not_overwrite_files: true
+  - allow_append_only: true
+  - create_only_if_missing: true
+
+behavior:
+  mode: incremental
+  description: >
+    Generate only missing folders/files. If already present,
+    leave unchanged unless explicitly instructed.
