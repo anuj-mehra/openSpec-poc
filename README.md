@@ -7,11 +7,29 @@
 cd /Users/anujmehra/git/openSpec-poc/
 openspec init
 
+This step will add following;
+    .github\agents
+    .github\workflows
+    .github\workflows\copilot-setup-steps.yml
+    .github\skills
+    .github\prompts
+
+
+## do git push
 
 
 
 
+## OpenSpec contains two folders;
+1. \openspec\changes\ => for the proposed updates
+2. \openspec\specs\   => for the current truth
 
+These two folders keep state and diffs different.
+
+## Following commands helped in create a Java 25 + SprintBoot 4.1.1 project
+
+
+-----------------------------------------------------------------------------
 specs/       → defines WHAT to generate
 skills/      → defines HOW to generate
 actions/     → automates WHEN to generate

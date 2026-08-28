@@ -25,5 +25,23 @@ bin/
 ### VS Code ###
 .vscode/
 
+/.idea/
+
+### Maven / Java ###
+/target/
+!.mvn/wrapper/maven-wrapper.jar
+**/target/
+*.class
+*.log
+
+### Spring Boot ###
+*.jar
+*.war
+*.ear
+
+### Local env ###
+.env
+.env.*
+
 ### Mac OS ###
 .DS_Store
