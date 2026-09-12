@@ -26,3 +26,6 @@ jobs:
 
       - name: Build Jib image
         run: mvn -B -DskipTests jib:dockerBuild
+
+      - name: Show Docker images
+        run: docker images
