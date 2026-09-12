@@ -55,7 +55,12 @@
                         <image>eclipse-temurin:25-jre</image>
                     </from>
                     <to>
-                        <image>java25-springboot-demo:local</image>
+                        <image>ghcr.io/anuj-mehra/java25-springboot-demo:latest</image>
+                        <auth>
+                            <username>${env.JIB_USERNAME}</username>
+                            <password>${env.JIB_PASSWORD}</password>
+                        </auth>
+                        <!--<image>java25-springboot-demo:local</image>-->
                     </to>
                     <container>
                         <creationTime>USE_CURRENT_TIMESTAMP</creationTime>

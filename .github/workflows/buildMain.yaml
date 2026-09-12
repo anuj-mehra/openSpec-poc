@@ -5,6 +5,10 @@ on:
     branches: [ main ]
   pull_request:
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -25,7 +29,10 @@ jobs:
         run: mvn test
 
       - name: Build Jib image
-        run: mvn -B -DskipTests jib:dockerBuild
+        run: mvn -B -DskipTests jib:build
+        env:
+          JIB_USERNAME: ${{ github.actor }}
+          JIB_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Show Docker images
         run: docker images
