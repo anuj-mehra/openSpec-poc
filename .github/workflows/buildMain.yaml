@@ -40,7 +40,9 @@ jobs:
       - name: Build Jib image
         run: |
           IMAGE_TAG="${{ steps.image_version.outputs.tag }}"
-          mvn -B -DskipTests jib:build -Djib.to.image=ghcr.io/${{ github.repository_owner }}/java25-springboot-demo:${IMAGE_TAG}
+          mvn -B -DskipTests jib:build \
+            -Djib.to.image=ghcr.io/${{ github.repository_owner }}/java25-springboot-demo:${IMAGE_TAG} \
+            -Djib.from.platforms=linux/amd64,linux/arm64
         env:
           JIB_USERNAME: ${{ github.actor }}
           JIB_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
