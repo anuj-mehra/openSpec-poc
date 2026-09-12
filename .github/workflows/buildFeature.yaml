@@ -18,9 +18,10 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Set up JDK
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
-          java-version: '17'
+          distribution: 'temurin'
+          java-version: '25'
 
       - name: Cache Maven dependencies
         uses: actions/cache@v3
@@ -35,6 +36,9 @@ jobs:
 
       - name: Run Unit Tests
         run: mvn test
+
+      - name: Build Jib image
+        run: mvn -B -DskipTests jib:dockerBuild
 
       - name: Validate Specs (OpenSpec)
         run: |
