@@ -10,6 +10,7 @@
 
 ## 3. Verification
 
-- [ ] 3.1 Run the relevant Maven/Jib verification command and confirm the image build completes successfully or report any environment-specific blocker
+- [x] 3.1 Run the relevant Maven/Jib verification command and confirm the image build completes successfully or report any environment-specific blocker
+- [x] 3.2 Add automatic patch-version generation for Docker image tags and verify the script starts at 1.0.0 and advances to 1.0.1, 1.0.2, etc.
 
-This final verification is currently blocked in this local environment because Docker is not running (`docker load` fails with 'Cannot connect to the Docker daemon at unix:///var/run/docker.sock'). The Maven package step still succeeds, and the CI workflow is ready for a Docker-enabled runner.
+This final verification is environment-dependent because the local Docker daemon is not running (`docker load` fails with 'Cannot connect to the Docker daemon at unix:///var/run/docker.sock'). The Maven package step succeeds, and the workflow now computes the next patch version as part of the image build.

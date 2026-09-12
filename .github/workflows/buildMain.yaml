@@ -6,7 +6,7 @@ on:
   pull_request:
 
 permissions:
-  contents: read
+  contents: write
   packages: write
 
 jobs:
@@ -14,13 +14,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '25'
+
+      - name: Compute image version
+        id: image_version
+        run: |
+          IMAGE_TAG=$(bash scripts/next-image-version.sh)
+          echo "tag=${IMAGE_TAG}" >> "$GITHUB_OUTPUT"
 
       - name: Build
         run: mvn clean install
@@ -29,10 +37,23 @@ jobs:
         run: mvn test
 
       - name: Build Jib image
-        run: mvn -B -DskipTests jib:build
+        run: |
+          IMAGE_TAG="${{ steps.image_version.outputs.tag }}"
+          mvn -B -DskipTests jib:build -Djib.to.image=ghcr.io/${{ github.repository_owner }}/java25-springboot-demo:${IMAGE_TAG}
         env:
           JIB_USERNAME: ${{ github.actor }}
           JIB_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish image tag
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          IMAGE_TAG="${{ steps.image_version.outputs.tag }}"
+          if ! git rev-parse -q --verify "refs/tags/${IMAGE_TAG}" >/dev/null; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git tag "${IMAGE_TAG}"
+            git push origin "refs/tags/${IMAGE_TAG}"
+          fi
 
       - name: Show Docker images
         run: docker images
