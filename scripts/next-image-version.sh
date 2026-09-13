@@ -16,3 +16,5 @@ fi
 IFS='.' read -r major minor patch <<< "$latest_version"
 
 patch=$((patch + 1))
+
+echo "${major}.${minor}.${patch}"
